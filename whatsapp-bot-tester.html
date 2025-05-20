@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Bot Tester - Kent Delivery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    body {
+      background-color: #f0f2f5;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .header {
+      background-color: #128C7E;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    
+    .chat-container {
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+      background-color: #e5ddd5;
+      background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5bdb5' fill-opacity='0.4'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .message {
+      padding: 10px 15px;
+      border-radius: 7.5px;
+      margin-bottom: 10px;
+      max-width: 80%;
+      position: relative;
+      word-wrap: break-word;
+    }
+    
+    .user-message {
+      background-color: #dcf8c6;
+      margin-left: auto;
+      border-radius: 7.5px 0 7.5px 7.5px;
+    }
+    
+    .bot-message {
+      background-color: white;
+      margin-right: auto;
+      border-radius: 0 7.5px 7.5px 7.5px;
+    }
+    
+    .message-time {
+      font-size: 11px;
+      color: #999;
+      text-align: right;
+      margin-top: 5px;
+    }
+    
+    .input-container {
+      padding: 10px;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .phone-input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      outline: none;
+      background-color: white;
+    }
+    
+    .message-input {
+      flex: 3;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      margin-right: 10px;
+      outline: none;
+      background-color: white;
+    }
+    
+    .send-button {
+      background-color: #128C7E;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .bot-info {
+      padding: 15px;
+      background-color: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+    
+    .prompt-container {
+      margin-top: 20px;
+    }
+    
+    .prompt-button {
+      padding: 8px 12px;
+      margin: 5px;
+      background-color: #e2f3ff;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .prompt-button:hover {
+      background-color: #cce7ff;
+    }
+    
+    h3 {
+      margin-top: 15px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .bot-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
+      color: white;
+      background-color: #25D366;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>WhatsApp Bot Tester</h1>
+      <div class="bot-status">Bot Online</div>
+    </div>
+    
+    <div class="chat-container" id="chat-container">
+      <div class="message bot-message">
+        Olá! Bem-vindo ao teste do WhatsApp Bot do Kent Delivery. Digite uma mensagem para começar.
+        <div class="message-time">Agora</div>
+      </div>
+    </div>
+    
+    <div class="input-container">
+      <input type="text" class="phone-input" id="phone-input" placeholder="Telefone (ex: 5511999887766)">
+      <input type="text" class="message-input" id="message-input" placeholder="Digite uma mensagem...">
+      <button class="send-button" id="send-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="white"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="bot-info">
+      <h3>Mensagens de Exemplo:</h3>
+      <div class="prompt-container">
+        <button class="prompt-button">Bom dia</button>
+        <button class="prompt-button">Olá, tudo bem?</button>
+        <button class="prompt-button">Quero ver o cardápio</button>
+        <button class="prompt-button">Tem alguma promoção?</button>
+      </div>
+      
+      <h3>Status do Bot</h3>
+      <p>O bot está configurado para responder a saudações, perguntas sobre cardápio e promoções.</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chatContainer = document.getElementById('chat-container');
+      const messageInput = document.getElementById('message-input');
+      const phoneInput = document.getElementById('phone-input');
+      const sendButton = document.getElementById('send-button');
+      const promptButtons = document.querySelectorAll('.prompt-button');
+      
+      // Definir número padrão
+      phoneInput.value = "5511999887766";
+      
+      // Adicionar mensagem ao chat
+      function addMessage(text, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        // Formatar links em mensagens
+        const formattedText = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+        messageDiv.innerHTML = formattedText;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        messageDiv.appendChild(timeDiv);
+        chatContainer.appendChild(messageDiv);
+        
+        // Auto-scroll para a última mensagem
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      // Enviar mensagem e receber resposta
+      async function sendMessage() {
+        const messageText = messageInput.value.trim();
+        const phoneNumber = phoneInput.value.trim();
+        
+        if (!messageText || !phoneNumber) return;
+        
+        // Adicionar mensagem do usuário
+        addMessage(messageText, true);
+        
+        // Limpar campo de entrada
+        messageInput.value = '';
+        
+        // Simular "digitando..."
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot-message';
+        typingDiv.textContent = 'Digitando...';
+        chatContainer.appendChild(typingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Enviar para o servidor e processar resposta
+        try {
+          // Tentar chamar a API de processamento de mensagem do bot
+          const response = await fetch('/api/whatsapp/receive-message', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              phoneNumber: phoneNumber,
+              message: messageText
+            })
+          });
+          
+          // Processar resposta
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Remover mensagem "digitando..."
+            chatContainer.removeChild(typingDiv);
+            
+            // Se a mensagem foi processada, a resposta já foi enviada
+            if (data.wasProcessed) {
+              // Simular algum atraso
+              setTimeout(() => {
+                // Verificar se a resposta está na propriedade resposta ou message
+                const botResponse = data.resposta || data.message || "Obrigado pela sua mensagem! Vou processar isso.";
+                addMessage(botResponse);
+              }, 800);
+            } else {
+              // Resposta padrão se não foi processada
+              setTimeout(() => {
+                addMessage("Recebi sua mensagem! Um atendente entrará em contato em breve.");
+              }, 800);
+            }
+          } else {
+            throw new Error('Falha na comunicação com o servidor');
+          }
+        } catch (error) {
+          console.error('Erro ao processar mensagem:', error);
+          
+          // Remover mensagem "digitando..."
+          chatContainer.removeChild(typingDiv);
+          
+          // Solução offline - implementar lógica local para testes
+          // Analisar a mensagem localmente
+          setTimeout(() => {
+            processMessageLocally(messageText);
+          }, 1000);
+        }
+      }
+      
+      // Função para processar mensagem localmente quando offline
+      function processMessageLocally(message) {
+        const msgLower = message.toLowerCase();
+        
+        if (msgLower.includes('bom dia') || msgLower.includes('boa tarde') || 
+            msgLower.includes('boa noite') || msgLower.includes('olá') || 
+            msgLower.includes('oi') || msgLower.length < 10) {
+          
+          addMessage("Olá! Bem-vindo ao *Kent Delivery*! 😊\n\nComo posso ajudar você hoje?\n\n" +
+            "• Digite *MENU* para ver nosso cardápio digital\n" +
+            "• Digite *PROMOÇÃO* para conhecer as ofertas do dia\n" +
+            "• Digite *ENDEREÇO* para saber nossa localização");
+            
+        } else if (msgLower.includes('cardapio') || msgLower.includes('cardápio') || 
+                  msgLower.includes('menu') || msgLower.includes('opções')) {
+          
+          addMessage("🍔 *CARDÁPIO DIGITAL* 🍕\n\nAcesse nosso cardápio digital completo no link abaixo:\n" +
+            "https://www.kent-delivery.com/menu\n\n" +
+            "Você pode fazer seu pedido diretamente pelo site ou digitando os itens aqui mesmo!");
+            
+        } else if (msgLower.includes('promoção') || msgLower.includes('promocao') || 
+                  msgLower.includes('oferta') || msgLower.includes('desconto')) {
+          
+          addMessage("🔥 *PROMOÇÕES DO DIA* 🔥\n\n" +
+            "• 🍕 Pizza Grande + Refrigerante 2L por apenas R$49,90\n" +
+            "• 🍔 Combo Hambúrguer + Batata + Refrigerante por R$29,90\n" +
+            "• 🥗 Na compra de qualquer prato executivo, ganhe uma sobremesa!\n\n" +
+            "Válido apenas para hoje. Aproveite! 😋");
+            
+        } else {
+          addMessage("Obrigado pela sua mensagem! Um atendente entrará em contato em breve.");
+        }
+      }
+      
+      // Event listeners
+      sendButton.addEventListener('click', sendMessage);
+      
+      messageInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          sendMessage();
+        }
+      });
+      
+      // Adicionar mensagens exemplo ao clicar nos botões
+      promptButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          messageInput.value = button.textContent;
+          sendMessage();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

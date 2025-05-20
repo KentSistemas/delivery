@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  # Aplicação principal (Kent Delivery)
+  app:
+    container_name: kent-delivery
+    image: node:20-alpine
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "80:3000"
+      - "3333:3333"  # Porta para o servidor WhatsApp
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - NODE_ENV=production
+    command: >
+      sh -c "npm ci && 
+             npm run build && 
+             (node servidor-whatsapp.cjs &) &&
+             npm run start"
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+  # Redis para armazenamento de sessões (opcional, mas recomendado)
+  redis:
+    image: redis:alpine
+    container_name: kent-delivery-redis
+    restart: always
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
+
+volumes:
+  redis-data:
